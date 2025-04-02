@@ -16,6 +16,46 @@ type Repo struct {
 	Dir string `json:"dir"`
 }
 
+func (r *Repo) Push() error {
+	cmd := exec.Command("git", "push")
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("git push: %s", out)
+	}
+	return nil
+}
+
+func (r *Repo) ForcePush() error {
+	cmd := exec.Command("git", "push", "-f")
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("git push -f: %s", out)
+	}
+	return nil
+}
+
+func (r *Repo) AddAll() error {
+	cmd := exec.Command("git", "add", "--all")
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("git add --all: %s", out)
+	}
+	return nil
+}
+
+func (r *Repo) Commit(msg string) error {
+	cmd := exec.Command("git", "commit", "-m", msg)
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("git commit: %s", out)
+	}
+	return nil
+}
+
 func (r *Repo) Branch() (string, error) {
 	cmd := exec.Command("git", "status")
 	cmd.Dir = r.Dir
