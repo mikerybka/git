@@ -49,3 +49,25 @@ func (r *Repo) Pull() (updated bool, err error) {
 	}
 	return true, nil
 }
+
+func (r *Repo) Checkout(branch string) (err error) {
+	cmd := exec.Command("git", "checkout", branch)
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	s := strings.TrimSpace(string(out))
+	if err != nil {
+		return fmt.Errorf("git checkout: %s", s)
+	}
+	return nil
+}
+
+func (r *Repo) CheckoutNew(branch string) (err error) {
+	cmd := exec.Command("git", "checkout", "-b", branch)
+	cmd.Dir = r.Dir
+	out, err := cmd.CombinedOutput()
+	s := strings.TrimSpace(string(out))
+	if err != nil {
+		return fmt.Errorf("git checkout: %s", s)
+	}
+	return nil
+}
